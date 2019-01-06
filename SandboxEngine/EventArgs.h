@@ -12,3 +12,11 @@ struct KeyEventArgs
 	int key;
 	KeyAction action;
 };
+
+/*
+ * 鼠标移动事件
+ */
+struct MouseMoveEventArgs
+{
+	double mouseX, mouseY;
+};

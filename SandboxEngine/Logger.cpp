@@ -3,6 +3,8 @@
 #include <iostream>
 #include <iomanip>
 #include <chrono>
+#include <Windows.h>
+#include <DbgHelp.h>
 
 #undef Logger
 
@@ -12,6 +14,10 @@
 #define GREEN "\033[32m"
 #define YELLOW "\033[33m"
 #define BLUE "\033[34m"
+#define BOLDRED "\033[1m\033[31m"
+#define BOLDGREEN "\033[1m\033[32m"
+#define BOLDYELLOW "\033[1m\033[33m"
+#define BOLDBLUE "\033[1m\033[34m"
 #define BOLDWHITE "\033[1m\033[37m"
 
 Logger::Logger()
@@ -62,4 +68,24 @@ void Logger::Log(const char* msg, const char* prefix, const LoggerColor msgColor
 	std::cout << msg << std::endl;
 	setColor(LoggerColorNormal);
 	logStream << "[" << formatTime << "]" << "[" << prefix << "]" << msg << std::endl;
+}
+
+void Logger::PrintBacktrace()
+{
+	const auto process = GetCurrentProcess();
+	SymInitialize(process, nullptr, true);
+	void* stack[100];
+	const auto frames = CaptureStackBackTrace(0, 100, stack, nullptr);
+	const auto symbol = static_cast<SYMBOL_INFO*>(calloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char), 1));
+	symbol->MaxNameLen = 255;
+	symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+	for (auto i = 0; i < frames; i++)
+	{
+		SymFromAddr(process, DWORD64(stack[i]), nullptr, symbol);
+		IMAGEHLP_LINE64 lineInfo;
+		DWORD displacement = 0;
+		SymGetLineFromAddr64(process, symbol->Address, &displacement, &lineInfo);
+		std::cout << "\tIn " << BOLDWHITE << symbol->Name << RESET << "\n\t\tAt line " << BOLDYELLOW << lineInfo.LineNumber << RESET << std::endl;
+	}
+	free(symbol);
 }

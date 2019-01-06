@@ -3,8 +3,8 @@
 
 int main(int argc, char* argv)
 {
-	Window mainWindow(500, 500, "SandbocEngine", false);
-	Logger.LogCrash("test");
+	Window mainWindow(640, 480, "SandboxEngine", false);
+	LogCrash("test");
 
 	while (true);
 }
