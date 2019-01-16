@@ -86,6 +86,7 @@ void Logger::PrintBacktrace()
 		DWORD displacement = 0;
 		SymGetLineFromAddr64(process, symbol->Address, &displacement, &lineInfo);
 		std::cout << "\tIn " << BOLDWHITE << symbol->Name << RESET << "\n\t\tAt line " << BOLDYELLOW << lineInfo.LineNumber << RESET << std::endl;
+		logStream << "\tIn " << symbol->Name << "\n\t\tAt line " << lineInfo.LineNumber << std::endl;
 	}
 	free(symbol);
 }
