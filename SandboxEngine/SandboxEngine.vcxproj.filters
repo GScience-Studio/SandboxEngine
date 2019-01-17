@@ -8,6 +8,9 @@
     <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="ModBlock.cpp">
+      <Filter>InnerBlock</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h" />
@@ -20,6 +23,10 @@
     <ClInclude Include="World.h" />
     <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="BlockAir.h">
+      <Filter>InnerBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SandboxEngine.h" />
+    <ClInclude Include="ModBlock.h">
       <Filter>InnerBlock</Filter>
     </ClInclude>
   </ItemGroup>

@@ -11,7 +11,6 @@ class Chunk;
  */
 class IBlockRenderer
 {
-	
 };
 
 class BlockBase;
@@ -36,7 +35,10 @@ class BlockBase : public std::enable_shared_from_this<BlockBase>, NonCopyable
 	friend class Chunk;
 protected:
 	//BlockBase构造
-	BlockBase(Chunk& chunk, const int x, const int y, const int z) : x(x), y(y), z(z), chunk(chunk) {}
+	BlockBase(Chunk& chunk, const int x, const int y, const int z) : x(x), y(y), z(z), chunk(chunk)
+	{
+	}
+
 public:
 	//方块的区块内坐标
 	const int x, y, z;
@@ -47,10 +49,12 @@ public:
 	using BlockConstructor = std::function<Block(Chunk& chunk, int x, int y, int z)>;
 
 	//Block类型转换
-	template<class BlockType, class = std::enable_if_t<std::is_base_of<BlockBase, BlockType>::value>> std::shared_ptr<BlockType> As()
+	template <class BlockType, class = std::enable_if_t<std::is_base_of<BlockBase, BlockType>::value>>
+	std::shared_ptr<BlockType> As()
 	{
 		return std::static_pointer_cast<BlockType>(shared_from_this());
 	}
+
 	virtual ~BlockBase() = default;
 };
 
@@ -68,18 +72,19 @@ public:
 	{
 		return mBlockList;
 	}
+
 	//获取实例
 	static BlockRegistry& GetInstance()
 	{
 		static BlockRegistry blockRegistry;
 		return blockRegistry;
 	}
+
 	//注册方块
 	void Register(const char* blockName, BlockBase::BlockConstructor blockConstructor)
 	{
 		mBlockList.emplace_back(std::make_pair(blockName, blockConstructor));
 	}
-	
 };
 
 //自动创建Block的结构
@@ -87,11 +92,11 @@ public:
 private:\
 	type(Chunk& chunk, const int x, const int y, const int z) : base(chunk, x, y, z) {} \
 public:\
-	static Block Constructor(Chunk& chunk, int x, int y, int z)\
+	static Block Constructor(Chunk& chunk, const int x, const int y, const int z)\
 	{\
-		return Block((BlockBase*)new type(chunk, x, y, z));\
+		return Block(static_cast<BlockBase*>(new type(chunk, x, y, z)));\
 	}private:class _____{}
 
 //获取BlockRegistry实例
 #define BlockRegistry BlockRegistry::GetInstance()
-#define Register(type) Register(#type, type::Constructor)
+#define RegisterBlock(type) Register(#type, type::Constructor)

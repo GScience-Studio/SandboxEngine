@@ -18,7 +18,8 @@ public:
 /*
  * 资源接口
  */
-template <class ResourceType, class = typename std::enable_if<std::is_base_of<IResource, ResourceType>::value>::type> class ResourceLoader
+template <class ResourceType, class = typename std::enable_if<std::is_base_of<IResource, ResourceType>::value>::type>
+class ResourceLoader
 {
 public:
 	//加载资源
@@ -45,7 +46,8 @@ public:
 		return resourceCache;
 	}
 
-	template <class ResourceType> ResourceType& Get(const char* path)
+	template <class ResourceType>
+	ResourceType& Get(const char* path)
 	{
 		std::string pathStr = path;
 		for (auto& c : pathStr)
@@ -54,25 +56,23 @@ public:
 		const auto result = mResource.find(path);
 		if (result != mResource.end() && result->second.first == typeid(ResourceType).hash_code())
 			return *(reinterpret_cast<ResourceType*>(result->second.second));
-		;
 		return *(reinterpret_cast<ResourceType*>(
 			mResource.emplace(
-				pathStr, 
-				std::make_pair<size_t, IResource*>(
-					typeid(ResourceType).hash_code(), 
-					reinterpret_cast<IResource*>(ResourceLoader<ResourceType>().Load(path))
-					)
-			)
-			.first->second.second));
+				         pathStr,
+				         std::make_pair<size_t, IResource*>(
+					         typeid(ResourceType).hash_code(),
+					         reinterpret_cast<IResource*>(ResourceLoader<ResourceType>().Load(path))
+				         )
+			         )
+			         .first->second.second));
 	}
 };
 
 class Texture : IResource
 {
 public:
-	void Load(const char* path)
+	void Load(const char* path) override
 	{
-		
 	}
 };
 

@@ -11,15 +11,15 @@ void Window::GlfwFunOnKey(GLFWwindow*, const int key, int, const int action, int
 	GetInstance().keyEvent.Do(KeyEventArgs
 		{
 			key,
-			action == GLFW_PRESS ? KeyPress :
-			action == GLFW_RELEASE ? KeyRelease : KeyRepeat
+			action == GLFW_PRESS ? KeyPress : action == GLFW_RELEASE ? KeyRelease : KeyRepeat
 		});
 }
+
 void Window::GlfwFunCursorPos(GLFWwindow*, const double x, const double y)
 {
 	GetInstance().mouseMoveEvent.Do(MouseMoveEventArgs
 		{
-			x,y
+			x, y
 		});
 }
 
@@ -34,7 +34,7 @@ void Window::InitWindowAndEvent() const
 Window::Window(const int width, const int height, const char* title, const bool isFullscreen)
 {
 	if (instance != nullptr)
-		LogError("There is already a window instance in the program.");
+	LogError("There is already a window instance in the program.");
 
 	instance = this;
 
@@ -54,16 +54,6 @@ Window::Window(const int width, const int height, const char* title, const bool 
 		if (e.key == GLFW_KEY_F11 && e.action == KeyPress)
 			ChangeWindowSize(width, height, !mIsFullScreen);
 	};
-
-	while (!glfwWindowShouldClose(mWindow))
-	{
-		glClearColor(0, 0, 1, 0);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		glfwSwapBuffers(mWindow);
-
-		glfwPollEvents();
-	}
 }
 
 Window::~Window()
@@ -87,7 +77,8 @@ void Window::ChangeWindowSize(const int width, const int height, const bool isFu
 		glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
-		const auto newWindow = glfwCreateWindow(mode->width, mode->height, mWindowTitle, glfwGetPrimaryMonitor(), mWindow);
+		const auto newWindow = glfwCreateWindow(mode->width, mode->height, mWindowTitle, glfwGetPrimaryMonitor(),
+		                                        mWindow);
 		Assert(newWindow != nullptr);
 		glfwDestroyWindow(mWindow);
 		mWindow = newWindow;
@@ -106,11 +97,24 @@ void Window::ChangeWindowSize(const int width, const int height, const bool isFu
 	int realWidth, realHeight;
 	glfwGetWindowSize(mWindow, &realWidth, &realHeight);
 
-	glViewport(0, 0, realWidth, realHeight);	
+	glViewport(0, 0, realWidth, realHeight);
 	glfwShowWindow(mWindow);
 }
 
 Window& Window::GetInstance()
 {
 	return *instance;
+}
+
+void Window::Run()
+{
+	while (!glfwWindowShouldClose(mWindow))
+	{
+		glClearColor(0, 0, 1, 0);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glfwSwapBuffers(mWindow);
+
+		glfwPollEvents();
+	}
 }

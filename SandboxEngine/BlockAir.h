@@ -3,5 +3,5 @@
 
 class BlockAir : public BlockBase
 {
-	BlockConstructorHelper(BlockAir, BlockBase);
+BlockConstructorHelper(BlockAir, BlockBase);
 };

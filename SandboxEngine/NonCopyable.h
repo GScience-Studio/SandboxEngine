@@ -1,6 +1,6 @@
 #pragma once
 
-class NonCopyable 
+class NonCopyable
 {
 protected:
 	NonCopyable() = default;

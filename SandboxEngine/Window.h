@@ -45,6 +45,9 @@ public:
 	//销毁窗体
 	~Window();
 
+	//进入窗体主循环
+	void Run();
+
 	//改变窗体大小
 	void ChangeWindowSize(int width, int height, bool isFullscreen);
 

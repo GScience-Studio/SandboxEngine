@@ -7,7 +7,6 @@
 
 class TestBlock : BlockBase
 {
-
 };
 
 int main(int argc, char* argv)
@@ -17,7 +16,5 @@ int main(int argc, char* argv)
 	auto test = ResourceCache.Get<Texture>("test");
 
 	Window mainWindow(640, 480, "SandboxEngine", false);
-	LogCrash("test");
-
-	while (true);
+	mainWindow.Run();
 }

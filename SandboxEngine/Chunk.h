@@ -14,7 +14,9 @@ struct BlockData
 	unsigned int lightG : 4;
 	unsigned int lightB : 4;
 
-	BlockData() : blockId(0), lightR(0), lightG(0), lightB(0) {}
+	BlockData() : blockId(1), lightR(0), lightG(0), lightB(0)
+	{
+	}
 };
 
 /*
@@ -31,7 +33,9 @@ class Chunk : NonCopyable
 	BlockData mBlockData[16][16][16];
 
 	//只允许World类创建Chunk
-	Chunk(World& world) : mWorld(world) {}
+	Chunk(World& world) : mWorld(world)
+	{
+	}
 
 public:
 	Block GetBlock(int x, int y, int z);

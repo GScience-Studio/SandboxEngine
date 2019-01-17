@@ -7,7 +7,8 @@ World::World()
 {
 	auto blockInfoList = BlockRegistry.GetBlockList();
 	if (blockInfoList.size() > USHRT_MAX)
-		LogError("There are " + std::to_string(blockInfoList.size()) + " blocks. But support only " + std::to_string(USHRT_MAX));
+	LogError("There are " + std::to_string(blockInfoList.size()) + " blocks. But support only " + std::to_string(
+		USHRT_MAX));
 
 	//³õÊ¼»¯BlockË÷Òý
 	for (const auto& blockInfo : blockInfoList)
@@ -28,7 +29,7 @@ uint16_t World::GetBlockIdFromName(const char* blockName)
 {
 	const auto blockId = mBlockNameToId.find(blockName);
 	if (blockId == mBlockNameToId.end())
-		LogError("Invalid blockName: " + blockName);
+	LogError("Invalid blockName: " + blockName);
 	return blockId->second;
 }
 
@@ -36,6 +37,6 @@ BlockBase::BlockConstructor World::GetBlockConstructorFromId(const uint16_t bloc
 {
 	const auto blockConstructor = mBlockIdToConstructor.find(blockId);
 	if (blockConstructor == mBlockIdToConstructor.end())
-		LogError("Invalid blockId: " + std::to_string(blockId));
+	LogError("Invalid blockId: " + std::to_string(blockId));
 	return blockConstructor->second;
 }

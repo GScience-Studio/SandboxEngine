@@ -5,8 +5,11 @@
  */
 enum KeyAction
 {
-	KeyPress, KeyRelease, KeyRepeat
+	KeyPress,
+	KeyRelease,
+	KeyRepeat
 };
+
 struct KeyEventArgs
 {
 	int key;

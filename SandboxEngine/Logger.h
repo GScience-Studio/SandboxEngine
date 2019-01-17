@@ -8,8 +8,8 @@
 enum LoggerColor
 {
 	LoggerColorNormal,
-	LoggerColorRed, 
-	LoggerColorYellow, 
+	LoggerColorRed,
+	LoggerColorYellow,
 	LoggerColorGreen,
 	LoggerColorBlue
 };
@@ -34,7 +34,8 @@ public:
 	 * 打印一行日志\n
 	 * 建议使用宏来打印日志
 	 */
-	void Log(const char* prefix, const char* msg, LoggerColor prefixColor = LoggerColorNormal, LoggerColor msgColor = LoggerColorNormal);
+	void Log(const char* prefix, const char* msg, LoggerColor prefixColor = LoggerColorNormal,
+	         LoggerColor msgColor = LoggerColorNormal);
 
 	/*
 	 * 打印Backtrace
@@ -69,5 +70,7 @@ public:
 
 #define LogInfo(message) Logger.Log(std::string() + StrCombiner(message),"Info");
 
-#define Assert(expression) if ((expression) == 0) {LogError((std::string("Failed when assert \"") + #expression + "\".").c_str());Logger.PrintBacktrace();}Logger
-#define AssertEx(expression, reason) if ((expression) == 0) {LogError((std::string("Failed when assert \"") + #expression + "\".\n\t" + StrCombiner(reason)).c_str());Logger.PrintBacktrace();}Logger
+#define Assert(expression) \
+	if ((expression) == 0) {LogError((std::string("Failed when assert \"") + #expression + "\".").c_str());Logger.PrintBacktrace();}Logger
+#define AssertEx(expression, reason) \
+	if ((expression) == 0) {LogError((std::string("Failed when assert \"") + #expression + "\".\n\t" + StrCombiner(reason)).c_str());Logger.PrintBacktrace();}Logger

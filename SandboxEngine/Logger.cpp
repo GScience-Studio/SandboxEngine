@@ -1,10 +1,12 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "Logger.h"
+#include "../SandboxEngine.h"
 #include <iostream>
 #include <iomanip>
 #include <chrono>
 #include <Windows.h>
 #include <DbgHelp.h>
+#include <vector>
 
 #undef Logger
 
@@ -23,10 +25,12 @@
 Logger::Logger()
 {
 	logStream = std::ofstream("log.log", std::fstream::out);
+	Log("Start Logger. Version Alpha 0.0.1.", "Logger");
 }
 
 Logger::~Logger()
 {
+	Log("Logger disposed.", "Logger");
 	logStream.close();
 }
 
@@ -63,11 +67,11 @@ void Logger::Log(const char* msg, const char* prefix, const LoggerColor msgColor
 	std::cout << BOLDWHITE;
 	std::cout << "[" << formatTime << "]";
 	setColor(prefixColor);
-	std::cout << "[" << prefix << "]";
+	std::cout << "[" << prefix << "] ";
 	setColor(msgColor);
 	std::cout << msg << std::endl;
 	setColor(LoggerColorNormal);
-	logStream << "[" << formatTime << "]" << "[" << prefix << "]" << msg << std::endl;
+	logStream << "[" << formatTime << "]" << "[" << prefix << "] " << msg << std::endl;
 }
 
 void Logger::PrintBacktrace()
@@ -85,7 +89,8 @@ void Logger::PrintBacktrace()
 		IMAGEHLP_LINE64 lineInfo;
 		DWORD displacement = 0;
 		SymGetLineFromAddr64(process, symbol->Address, &displacement, &lineInfo);
-		std::cout << "\tIn " << BOLDWHITE << symbol->Name << RESET << "\n\t\tAt line " << BOLDYELLOW << lineInfo.LineNumber << RESET << std::endl;
+		std::cout << "\tIn " << BOLDWHITE << symbol->Name << RESET << "\n\t\tAt line " << BOLDYELLOW << lineInfo.
+			LineNumber << RESET << std::endl;
 		logStream << "\tIn " << symbol->Name << "\n\t\tAt line " << lineInfo.LineNumber << std::endl;
 	}
 	free(symbol);
