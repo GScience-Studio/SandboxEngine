@@ -1,4 +1,8 @@
 #pragma once
+#include <memory>
+#include <map>
+#include "EventRawPtr.h"
+#include "GameEventArgs.h"
 
 /*
  * ¼üÅÌÊÂ¼ş

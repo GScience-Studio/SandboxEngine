@@ -175,6 +175,8 @@
     <ClInclude Include="Chunk.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventArgs.h" />
+    <ClInclude Include="EventRawPtr.h" />
+    <ClInclude Include="GameEventArgs.h" />
     <ClInclude Include="ModBlock.h" />
     <ClInclude Include="NonCopyable.h" />
     <ClInclude Include="Resource.h" />

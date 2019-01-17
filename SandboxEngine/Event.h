@@ -32,7 +32,7 @@ class EventRawPtr;
  * 事件模板
  */
 template <class Type>
-class Event : NonCopyable
+class Event
 {
 	friend class EventRawPtr;
 public:
@@ -45,9 +45,7 @@ public:
 	void Do(typename EventHandlerType::EventHandlerArgs args) const
 	{
 		for (auto eventHandler : mEventHandlers)
-		{
 			eventHandler.fun(args);
-		}
 	}
 
 	EventHandlerType& operator +=(decltype(EventHandlerType::fun)&& eventHandler)
@@ -69,31 +67,8 @@ public:
 		if (pos != mEventHandlers.end())
 			mEventHandlers.erase(pos);
 	}
-};
-
-/*
- * 事件指针
- */
-class EventRawPtr
-{
-	std::function<void(void*)> mAdd;
-public:
-	EventRawPtr() = default;
-
-	template <class EventType>
-	EventRawPtr(EventType* eventPtr = nullptr)
+	void Clear()
 	{
-		mAdd = [eventPtr](void* fun)
-		{
-			typename EventType::EventHandlerType::EventHandler::EventHandlerFuncType cppFun =
-				*reinterpret_cast<void(*)(typename EventType::EventHandlerType::EventHandlerArgs)>(fun);
-			auto& event = *reinterpret_cast<EventType*>(eventPtr);
-			event += cppFun;
-		};
-	}
-
-	void operator +=(void* fun) const
-	{
-		mAdd(fun);
+		mEventHandlers.clear();
 	}
 };

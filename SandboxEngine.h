@@ -28,3 +28,5 @@ struct SBE_ModBlockInitializerInfo
 typedef void (*SBE_ModInitializer)(SBE_ModInitializer_Type type, const void* data);
 
 #define SBE_ModInitializerFun SEAPI void SBE_ModMain(SBE_ModInitializer_Type type,const void* data)
+
+#include "SandboxEngine/GameEventArgs.h"

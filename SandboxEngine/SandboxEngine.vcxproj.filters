@@ -29,6 +29,8 @@
     <ClInclude Include="ModBlock.h">
       <Filter>InnerBlock</Filter>
     </ClInclude>
+    <ClInclude Include="EventRawPtr.h" />
+    <ClInclude Include="GameEventArgs.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="InnerBlock">

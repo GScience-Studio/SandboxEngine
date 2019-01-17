@@ -10,12 +10,24 @@ struct EventBinding
 	void* binding;
 };
 
+/*
+ * Mod Block
+ */
 class ModBlock : public BlockBase
 {
-	ModBlock(Chunk& chunk, int x, int y, int z);
+	friend class ModBlockEventInitializer;
 
-	static std::map<std::string, EventRawPtr>& GetEventMap();
+	std::map<std::string, EventRawPtr> GetEventMap();
+
+	/*
+	 * 方块事件
+	 */
+	//当方块被初始化时调用（即被获得时）
+	Event<EventHandler<BlockEventOnCreated>> mOnBlockCreated;
+
 public:
 	//绑定Mod Block事件
-	static Block Constructor(Chunk& chunk, int x, int y, int z, const std::vector<EventBinding>& eventBindings);
+	static Block Constructor(const std::string& blockName, const std::vector<EventBinding>& eventBindings);
+
+	Block Clone(Chunk& chunk, int x, int y, int z) const;
 };

@@ -9,10 +9,8 @@
 //µ¥Àý£¬·ÖÏí¸øSBE_BlockRegisterFun
 BlockRegistry* BlockRegistryInstance;
 
-void SBE_BlockRegisterFun(const char* blockName, int infoNum, SBE_BlockRegisterFunInfo* infos)
+void SBE_BlockRegisterFun(const char* blockName, const int infoNum, SBE_BlockRegisterFunInfo* infos)
 {
-	std::function<void()> test2;
-
 	std::vector<EventBinding> infoList;
 	infoList.reserve(infoNum);
 	for (auto i = 0; i < infoNum; ++i)
@@ -22,10 +20,12 @@ void SBE_BlockRegisterFun(const char* blockName, int infoNum, SBE_BlockRegisterF
 		eventBinding.binding = infos++->func;
 		infoList.emplace_back(eventBinding);
 	}
+	const std::string blockNameStr = blockName;
+	const auto modBlock = std::static_pointer_cast<ModBlock>(ModBlock::Constructor(blockNameStr, infoList));
 	BlockRegistryInstance->Register(blockName,
 	                                [=](Chunk& chunk, const int x, const int y, const int z)
 	                                {
-		                                return ModBlock::Constructor(chunk, x, y, z, infoList);
+		                                 return modBlock->Clone(chunk, x, y, z);
 	                                }
 	);
 }
@@ -44,5 +44,5 @@ BlockRegistry::BlockRegistry()
 		static_cast<SBE_BlockRegisterFunPtr>(&SBE_BlockRegisterFun)
 	};
 	ptr(BlockInitializer, reinterpret_cast<const void*>(&modInitializerInfo));
-	FreeLibrary(mod);
+	//FreeLibrary(mod);
 }

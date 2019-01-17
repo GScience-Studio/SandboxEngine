@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 #include "NonCopyable.h"
+#include "EventArgs.h"
+#include "Event.h"
 
 class Chunk;
 
@@ -30,20 +32,32 @@ using Block = std::shared_ptr<BlockBase>;
  *     //
  * }
  */
-class BlockBase : public std::enable_shared_from_this<BlockBase>, NonCopyable
+class BlockBase : public std::enable_shared_from_this<BlockBase>, protected Copyable
 {
 	friend class Chunk;
+
 protected:
+	Chunk* mChunk = nullptr;
+	//方块的区块内坐标
+	int mX = 0, mY = 0, mZ = 0;
+
+	BlockBase() = default;
+
 	//BlockBase构造
-	BlockBase(Chunk& chunk, const int x, const int y, const int z) : x(x), y(y), z(z), chunk(chunk)
+	BlockBase(Chunk& chunk, const int x, const int y, const int z) : mChunk(&chunk), mX(x), mY(y), mZ(z)
 	{
 	}
-
 public:
-	//方块的区块内坐标
-	const int x, y, z;
+	//方块坐标
+	const int &x = mX, &y = mY, &z = mY;
 	//所在区块
-	Chunk& chunk;
+	Chunk& chunk = *mChunk;
+
+	/*
+	 * 方块事件
+	 */
+	//当方块放置时调用
+	Event<EventHandler<BlockEventArgs>> onBlockPlaced;
 
 	//Block构造器
 	using BlockConstructor = std::function<Block(Chunk& chunk, int x, int y, int z)>;
@@ -99,4 +113,4 @@ public:\
 
 //获取BlockRegistry实例
 #define BlockRegistry BlockRegistry::GetInstance()
-#define RegisterBlock(type) Register(#type, type::Constructor)
+#define RegisterBlock(type) Register(#type, &type::Constructor)
